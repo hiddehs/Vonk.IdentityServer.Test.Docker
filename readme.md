@@ -1,3 +1,5 @@
+[![Build Status](https://firely.visualstudio.com/Vonk.IdentityServer.Test/_apis/build/status/FirelyTeam.Vonk.IdentityServer.Test?branchName=master)](https://firely.visualstudio.com/Vonk.IdentityServer.Test/_build/latest?definitionId=27&branchName=master)
+
 # Identity Provider for testing Vonk access control
 
 [Vonk FHIR Server](http://vonk.furore.com) provides access control features based on SMART on FHIR scopes and launch context. Because online available Open ID Connect providers do not provide these claims, we provide you with a simple in-memory Identity Provider that **can** provide these claims.
