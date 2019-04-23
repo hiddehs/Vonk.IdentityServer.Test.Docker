@@ -11,7 +11,7 @@ For instructions on how to use this and the access control features to use it fo
 
 ## Dependencies
 
-- Microsoft .NET Core 2.0
+- Microsoft .NET Core 2.2
 - [.NET FHIR API](https://github.com/ewoutkramer/fhir-net-api)
 
 The Identity Provider runs with preconfigured values in memory, so it has no database dependencies.
