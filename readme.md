@@ -9,6 +9,10 @@ For instructions on how to use this and the access control features to use it fo
 - [Vonk FHIR Server Access Control](http://docs.simplifier.net/vonk/features/accesscontrol.html)
 - [Usage of this Identity Provider](http://docs.simplifier.net/vonk/deployment/identityprovider.html)
 
+|Master|
+|---|
+|[![Build Status](https://firely.visualstudio.com/Vonk.IdentityServer.Test/_apis/build/status/FirelyTeam.Vonk.IdentityServer.Test?branchName=master)](https://firely.visualstudio.com/Vonk.IdentityServer.Test/_build/latest?definitionId=27&branchName=master)|
+
 ## Dependencies
 
 - Microsoft .NET Core 2.2
