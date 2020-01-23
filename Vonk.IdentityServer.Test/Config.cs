@@ -9,7 +9,7 @@ namespace Vonk.IdentityServer
 {
     public class Config
     {
-        private static List<Scope> _scopes =
+        private static readonly List<Scope> _scopes =
             (
                 from resourceType in F.ModelInfo.SupportedResources.Union(new[] { "*" })
                 from subject in new[] { "user", "patient" }

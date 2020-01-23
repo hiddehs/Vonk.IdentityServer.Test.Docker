@@ -15,8 +15,7 @@ namespace Vonk.IdentityServer
                 var userAgent = httpContext.Request.Headers["User-Agent"].ToString();
                 if (DisallowsSameSiteNone(userAgent))
                 {
-                    //.net core >3.0 should change value to SameSiteMode.Unspecified
-                    options.SameSite = (SameSiteMode)(-1);
+                    options.SameSite = SameSiteMode.Unspecified;
                 }
             }
         }
@@ -85,7 +84,8 @@ namespace Vonk.IdentityServer
                     CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
             });
             services
-                .AddMvc();
+                //Endpoint Routing does not support 'IApplicationBuilder.UseMvc(...)'. To use 'IApplicationBuilder.UseMvc' set 'MvcOptions.EnableEndpointRouting = false' inside 'ConfigureServices(...).
+                .AddMvc(mvcOptions => mvcOptions.EnableEndpointRouting = false);
 
             services
                 .AddIdentityServer()
