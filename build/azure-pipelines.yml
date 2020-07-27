@@ -37,8 +37,6 @@ stages:
       name: PublishedWebSite
       displayName: 'Publish Artifact: PublishedWebSite'
       inputs:
-        publishLocation: FilePath
-        targetPath: $(Build.ArtifactStagingDirectory)/drop
         PathtoPublish: '$(Build.StagingDirectory)/published'      
     
 - stage: deploy
@@ -46,6 +44,9 @@ stages:
   jobs: 
   - job: deploy
     steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        targetPath: $(Build.ArtifactStagingDirectory)/drop
     - task: AzureWebApp@1
       displayName: Azure Web App Deploy
       inputs:
