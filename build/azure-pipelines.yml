@@ -23,8 +23,16 @@ stages:
         name: 'Private pool'
   - job: publish
     steps:
-    - script: dotnet publish --configuration $(buildConfiguration) --output $(Build.StagingDirectory)/published
-      displayName: 'dotnet publish $(buildConfiguration)'
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet publish'
+      inputs:
+        command: publish
+        publishWebProjects: true
+        zipAfterPublish: true
+        projects: |
+         **\*.csproj
+         !**\*Tests.csproj
+        arguments: '-o $(Build.ArtifactStagingDirectory)/published -c $(buildConfiguration)'
     - task: PublishBuildArtifacts@1
       name: PublishedWebSite
       displayName: 'Publish Artifact: PublishedWebSite'
