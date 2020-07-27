@@ -50,4 +50,4 @@ stages:
         appType: webApp
         azureSubscription: $(azureSubscription)
         appName: vonk-identityserver
-        package: $(Build.StagingDirectory)/drop/**/*.zip
+        package: '$(Build.StagingDirectory)/published/**/*.zip'
