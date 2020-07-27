@@ -16,19 +16,20 @@ variables:
 stages:
 - stage: build
   jobs:
-  - template: build.yml@templates  # Template reference
-    parameters:
-      dotNetCoreVersion: '3.x'
-      pool:
-        name: 'Private pool'
   - job: publish
+    pool:
+      name: 'Private pool'    
     steps:
+    - task: UseDotNet@2
+      displayName: 'Use .NET Core sdk 3.1.x'
+      inputs:
+        packageType: sdk
+        version: 3.1.x
     - task: DotNetCoreCLI@2
-      displayName: 'dotnet publish'
+      displayName: 'Publish '
       inputs:
         command: publish
         publishWebProjects: true
-        zipAfterPublish: true
         projects: |
          **\*.csproj
          !**\*Tests.csproj
@@ -37,18 +38,20 @@ stages:
       name: PublishedWebSite
       displayName: 'Publish Artifact: PublishedWebSite'
       inputs:
-        PathtoPublish: '$(Build.StagingDirectory)/published'      
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/published'      
     
 - stage: deploy
   dependsOn: build
   jobs: 
   - job: deploy
+    pool:
+      name: 'Private pool' 
     steps:
     - task: DownloadPipelineArtifact@2
       inputs:
         targetPath: $(Build.ArtifactStagingDirectory)/drop
     - task: AzureWebApp@1
-      displayName: Azure Web App Deploy
+      displayName: Deploy to Azure WebApps
       inputs:
         appType: webApp
         azureSubscription: $(azureSubscription)
