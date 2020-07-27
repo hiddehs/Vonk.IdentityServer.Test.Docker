@@ -23,6 +23,8 @@ stages:
         name: 'Private pool'
   - job: publish
     steps:
+    - script: dotnet publish --configuration $(buildConfiguration) 
+      displayName: 'dotnet publish $(buildConfiguration)'
     - task: PublishBuildArtifacts@1
       name: PublishedWebSite
       displayName: 'Publish Artifact: PublishedWebSite'
@@ -40,4 +42,4 @@ stages:
         appType: webApp
         azureSubscription: $(azureSubscription)
         appName: vonk-identityserver
-        package: $(Build.StagingDirectory)/published/**/*.zip
+        package: $(Build.StagingDirectory)/drop/**/*.zip
