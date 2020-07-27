@@ -23,13 +23,13 @@ stages:
         name: 'Private pool'
   - job: publish
     steps:
-    - script: dotnet publish --configuration $(buildConfiguration) 
+    - script: dotnet publish --configuration $(buildConfiguration) --output $(Build.StagingDirectory)/published
       displayName: 'dotnet publish $(buildConfiguration)'
     - task: PublishBuildArtifacts@1
       name: PublishedWebSite
       displayName: 'Publish Artifact: PublishedWebSite'
       inputs:
-        PathtoPublish: '$(Build.StagingDirectory)'      
+        PathtoPublish: '$(Build.StagingDirectory)/published'      
     
 - stage: deploy
   dependsOn: build
