@@ -27,7 +27,7 @@ stages:
       name: PublishedWebSite
       displayName: 'Publish Artifact: PublishedWebSite'
       inputs:
-        PathtoPublish: '$(Build.StagingDirectory)/published'      
+        PathtoPublish: '$(Build.StagingDirectory)'      
     
 - stage: deploy
   dependsOn: build
