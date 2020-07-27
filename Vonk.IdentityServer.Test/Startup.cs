@@ -90,7 +90,9 @@ namespace Vonk.IdentityServer
             services
                 .AddIdentityServer()
                 .AddTestUsers(Config.GetUsers())
+#if DEBUG
                 .AddDeveloperSigningCredential()
+#endif
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients());
