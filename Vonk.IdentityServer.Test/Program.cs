@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using System.Net;
 
 namespace Vonk.IdentityServer
 {
@@ -26,6 +25,7 @@ namespace Vonk.IdentityServer
                 }
 #endif
                 )
+            .UseIIS()
             .Build();
     }
 }
