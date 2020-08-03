@@ -96,6 +96,7 @@ namespace Vonk.IdentityServer
 #endif
                 )
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
+                .AddInMemoryApiScopes(Config.GetApiScopes())
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients());
         }

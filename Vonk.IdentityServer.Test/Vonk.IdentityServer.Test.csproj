@@ -26,7 +26,7 @@
 
   <ItemGroup>
     <PackageReference Include="Hl7.Fhir.Specification.STU3" Version="1.9.0" />
-    <PackageReference Include="IdentityServer4" Version="3.1.4" />
+    <PackageReference Include="IdentityServer4" Version="4.0.4" />
   </ItemGroup>
 
   <ItemGroup>

@@ -9,25 +9,25 @@ namespace Vonk.IdentityServer
 {
     public class Config
     {
-        private static readonly List<Scope> _scopes =
-            (
-                from resourceType in F.ModelInfo.SupportedResources.Union(new[] { "*" })
-                from subject in new[] { "user", "patient" }
-                from action in new[] { "read", "write" }
-                select
-                 new Scope
-                 {
-                     Name = $"{subject}/{resourceType}.{action}",
-                     DisplayName = $"SMART on FHIR - {subject} may {action} resources of type {resourceType}"
-                 }
+        public static List<ApiScope> GetApiScopes() =>
+          (
+            from resourceType in F.ModelInfo.SupportedResources.Union(new[] { "*" })
+            from subject in new[] { "user", "patient" }
+            from action in new[] { "read", "write" }
+            select
+                new ApiScope
+                {
+                    Name = $"{subject}/{resourceType}.{action}",
+                    DisplayName = $"SMART on FHIR - {subject} may {action} resources of type {resourceType}"
+                }
             )
             .Union(new[]
             {
-                new Scope{
+                new ApiScope{
                     Name = "launch",
                     DisplayName = "SMART on FHIR launch context",
                     UserClaims = new[] {"patient", "encounter", "location" }
-                },
+                }
             })
             .ToList();
 
@@ -38,7 +38,7 @@ namespace Vonk.IdentityServer
                 new ApiResource{
                     Name = "vonk",
                     DisplayName = "Vonk FHIR Server",
-                    Scopes = _scopes
+                    Scopes = GetApiScopes().Select(scope => scope.Name).ToList()
                 }
             };
         }
@@ -50,7 +50,7 @@ namespace Vonk.IdentityServer
                 new Client
                 {
                     ClientId = "Postman",
-                    RedirectUris = new[] {"https://www.getpostman.com/oauth2/callback" },
+                    RedirectUris = new[] {"https://www.getpostman.com/oauth2/callback", "https://oauth.pstmn.io/v1/callback" },
 
                     AllowedGrantTypes = GrantTypes.Code,
 
@@ -61,8 +61,9 @@ namespace Vonk.IdentityServer
                     },
 
                     // scopes that client has access to
-                    AllowedScopes = _scopes.Select(scope => scope.Name).Union(new[] { "openid", "profile" }).ToList(),
+                    AllowedScopes = GetApiScopes().Select(scope => scope.Name).Union(new[] { "openid", "profile" }).ToList(),
                     AlwaysIncludeUserClaimsInIdToken = true,
+                    RequirePkce = false // Allow as an interactive client
                 },
             };
         }
