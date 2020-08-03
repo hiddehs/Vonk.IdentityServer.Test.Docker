@@ -11,10 +11,49 @@ resources:
 
 variables:
   buildConfiguration: 'Release'
+  azureSubscription: vonk-identityserver
 
-jobs:
-- template: build.yml@templates  # Template reference
-  parameters:
-    dotNetCoreVersion: '3.x'
+stages:
+- stage: build
+  jobs:
+  - job: publish
     pool:
-      vmImage: Ubuntu-16.04
+      name: 'Private pool'    
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Use .NET Core sdk 3.1.x'
+      inputs:
+        packageType: sdk
+        version: 3.1.x
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish '
+      inputs:
+        command: publish
+        publishWebProjects: true
+        projects: |
+         **\*.csproj
+         !**\*Tests.csproj
+        arguments: '-o $(Build.ArtifactStagingDirectory)/published -c $(buildConfiguration)'
+    - task: PublishBuildArtifacts@1
+      name: PublishedWebSite
+      displayName: 'Publish Artifact: PublishedWebSite'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/published'      
+    
+- stage: deploy
+  dependsOn: build
+  jobs: 
+  - job: deploy
+    pool:
+      name: 'Private pool' 
+    steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        targetPath: $(Build.ArtifactStagingDirectory)/drop
+    - task: AzureWebApp@1
+      displayName: Deploy to Azure WebApps
+      inputs:
+        appType: webApp
+        azureSubscription: $(azureSubscription)
+        appName: vonk-identityserver
+        package: '$(Build.ArtifactStagingDirectory)/drop/**/*.zip'

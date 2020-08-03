@@ -90,7 +90,11 @@ namespace Vonk.IdentityServer
             services
                 .AddIdentityServer()
                 .AddTestUsers(Config.GetUsers())
-                .AddDeveloperSigningCredential()
+                .AddDeveloperSigningCredential(
+#if RELEASE
+                false // do not persist key on release (every release invalidates previous keys)
+#endif
+                )
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients());
