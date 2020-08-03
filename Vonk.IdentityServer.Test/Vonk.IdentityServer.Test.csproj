@@ -12,13 +12,21 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Vonk.IdentityProvider.Test' ">
+    <StartAction>Project</StartAction>
+    <ExternalConsole>true</ExternalConsole>
+    <EnvironmentVariables>
+      <Variable name=" ASPNETCORE_ENVIRONMENT" value="Develop" />
+    </EnvironmentVariables>
+    <ApplicationURL>http://localhost:5100</ApplicationURL>
+  </PropertyGroup>
   <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Hl7.Fhir.Specification.STU3" Version="1.4.0" />
-    <PackageReference Include="IdentityServer4" Version="2.4.0" />
+    <PackageReference Include="Hl7.Fhir.Specification.STU3" Version="1.9.0" />
+    <PackageReference Include="IdentityServer4" Version="3.1.4" />
   </ItemGroup>
 
   <ItemGroup>
