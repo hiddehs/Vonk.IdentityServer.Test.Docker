@@ -12,6 +12,14 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Vonk.IdentityProvider.Test' ">
+    <StartAction>Project</StartAction>
+    <ExternalConsole>true</ExternalConsole>
+    <EnvironmentVariables>
+      <Variable name=" ASPNETCORE_ENVIRONMENT" value="Develop" />
+    </EnvironmentVariables>
+    <ApplicationURL>http://localhost:5100</ApplicationURL>
+  </PropertyGroup>
   <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
