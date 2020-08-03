@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+#if DEBUG
+using System.Net;
+#endif
 
 namespace Vonk.IdentityServer
 {
