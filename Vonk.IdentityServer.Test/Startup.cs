@@ -109,10 +109,9 @@ namespace Vonk.IdentityServer
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseMiddleware<ResponseCacheMiddleware>();
             app.UseCookiePolicy();
-
             app.UseIdentityServer();
-
             app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
         }
