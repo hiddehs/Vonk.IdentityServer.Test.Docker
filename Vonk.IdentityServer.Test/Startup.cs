@@ -89,7 +89,7 @@ namespace Vonk.IdentityServer
                 .AddMvc(mvcOptions => mvcOptions.EnableEndpointRouting = false);
 
             services
-                .AddIdentityServer()
+                .AddIdentityServer(Config.GetOptions)
                 .AddTestUsers(Config.GetUsers())
                 .AddDeveloperSigningCredential(
 #if RELEASE
