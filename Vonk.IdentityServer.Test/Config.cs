@@ -25,8 +25,17 @@ namespace Vonk.IdentityServer
             {
                 new ApiScope{
                     Name = "launch",
-                    DisplayName = "SMART on FHIR launch context",
+                    DisplayName = "Permission to obtain launch context when app is launched from an EHR",
                     UserClaims = new[] {"patient", "encounter", "location" }
+                },
+                new ApiScope
+                {
+                    Name = "launch/patient",
+                    DisplayName = "When launching outside the EHR, ask for a patient to be selected at launch time"
+                },
+                new ApiScope{
+                    Name = "fhirUser",
+                    DisplayName = "Permission to retrieve information about the current logged-in user"
                 }
             })
             .ToList();
