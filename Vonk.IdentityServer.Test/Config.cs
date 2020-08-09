@@ -1,4 +1,5 @@
-﻿using IdentityServer4.Models;
+﻿using IdentityServer4.Configuration;
+using IdentityServer4.Models;
 using IdentityServer4.Test;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,6 +75,25 @@ namespace Vonk.IdentityServer
                     AlwaysIncludeUserClaimsInIdToken = true,
                     RequirePkce = false // Allow as an interactive client
                 },
+                new Client
+                {
+                    ClientId = "Inferno",
+                    RedirectUris = new[] { "http://0.0.0.0:4567/inferno/oauth2/static/redirect", "http://localhost:4567/inferno/oauth2/static/redirect" },
+
+                    AllowedGrantTypes = GrantTypes.Code,
+
+                    // secret for authentication
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+
+                    // scopes that client has access to
+                    AllowedScopes = GetApiScopes().Select(scope => scope.Name).Union(new[] { "openid", "profile" }).ToList(),
+                    AlwaysIncludeUserClaimsInIdToken = true,
+                    RequirePkce = false, // Allow as an interactive client
+                    AllowOfflineAccess = true
+                },
             };
         }
 
@@ -105,6 +125,11 @@ namespace Vonk.IdentityServer
                     , Claims = new List<Claim>() { new Claim("patient", "bob-identifier")}
                 }
             };
+        }
+
+        public static void GetOptions(IdentityServerOptions identityServerOptions)
+        {
+            identityServerOptions.InputLengthRestrictions.Scope = 5000; // 149 resources in FHIR R4 * 30 characters
         }
 
     }
