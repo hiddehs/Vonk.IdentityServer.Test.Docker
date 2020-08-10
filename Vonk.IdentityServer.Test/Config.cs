@@ -10,6 +10,9 @@ namespace Vonk.IdentityServer
 {
     public class Config
     {
+
+        #region ApiScopes
+
         public static List<ApiScope> GetApiScopes() =>
           (
             from resourceType in F.ModelInfo.SupportedResources.Union(new[] { "*" })
@@ -41,6 +44,10 @@ namespace Vonk.IdentityServer
             })
             .ToList();
 
+        #endregion ApiScopes
+
+        #region ApiResources
+
         public static IEnumerable<ApiResource> GetApiResources()
         {
             return new List<ApiResource>
@@ -52,6 +59,19 @@ namespace Vonk.IdentityServer
                 }
             };
         }
+
+        public static IEnumerable<IdentityResource> GetIdentityResources()
+        {
+            return new List<IdentityResource>
+            {
+                new IdentityResources.OpenId(),
+                new IdentityResources.Profile(),
+            };
+        }
+
+        #endregion ApiResources
+
+        #region Clients
 
         public static IEnumerable<Client> GetClients()
         {
@@ -97,14 +117,9 @@ namespace Vonk.IdentityServer
             };
         }
 
-        public static IEnumerable<IdentityResource> GetIdentityResources()
-        {
-            return new List<IdentityResource>
-            {
-                new IdentityResources.OpenId(),
-                new IdentityResources.Profile(),
-            };
-        }
+        #endregion Clients
+
+        #region Users
 
         public static List<TestUser> GetUsers()
         {
@@ -114,23 +129,38 @@ namespace Vonk.IdentityServer
                 {
                     SubjectId = "1",
                     Username = "alice",
-                    Password = "password"
-                    , Claims = new List<Claim>() { new Claim("patient", "alice-identifier")}
+                    Password = "password",
+                    Claims = new List<Claim>() { GetDefaultPatientClaim() }
                 },
                 new TestUser
                 {
                     SubjectId = "2",
                     Username = "bob",
-                    Password = "password"
-                    , Claims = new List<Claim>() { new Claim("patient", "bob-identifier")}
+                    Password = "password",
+                    Claims = new List<Claim>() { GetDefaultPatientClaim() }
                 }
             };
         }
+
+        #endregion Users
+
+        #region Claims
+
+        public static Claim GetDefaultPatientClaim()
+        {
+            return new Claim("patient", "test");
+        }
+
+        #endregion Claims
+
+        #region IdentityServerOptions
 
         public static void GetOptions(IdentityServerOptions identityServerOptions)
         {
             identityServerOptions.InputLengthRestrictions.Scope = 5000; // 149 resources in FHIR R4 * 30 characters
         }
+
+        #endregion IdentityServerOptions
 
     }
 }
