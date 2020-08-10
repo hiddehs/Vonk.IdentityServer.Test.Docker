@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Vonk.IdentityServer.Test.ProfileService;
 using Vonk.IdentityServer.Test.SmartTokenValidation;
 
 namespace Vonk.IdentityServer
@@ -101,6 +102,7 @@ namespace Vonk.IdentityServer
                 .AddInMemoryApiScopes(Config.GetApiScopes())
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddCustomTokenRequestValidator<PatientIdTokenValidator>()
+                .AddProfileService<SmartPatientContextProfileService>()
                 .AddInMemoryClients(Config.GetClients());
         }
 
