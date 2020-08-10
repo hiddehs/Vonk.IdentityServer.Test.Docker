@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using 
 using IdentityServer4.Validation;
 using System.Security.Claims;
 
