@@ -10,6 +10,7 @@ namespace Vonk.IdentityServer.Test.ProfileService
         public Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
             context.IssuedClaims.Add(Config.GetDefaultPatientClaim()); // Add patient claim by default to each id_token
+            context.IssuedClaims.Add(Config.GetDefaultFHIRUserClaim()); // Add fhirUser claim by default to each id_token
             return Task.CompletedTask;
         }
 

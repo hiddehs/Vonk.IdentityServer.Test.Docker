@@ -149,6 +149,9 @@ namespace Vonk.IdentityServer
         public static Claim GetDefaultPatientClaim()
         {
             return new Claim("patient", "test");
+        public static Claim GetDefaultFHIRUserClaim()
+        {
+            return new Claim("fhirUser", $"{FHIR_BASE}/Practitioner/test");
         }
 
         #endregion Claims
@@ -159,6 +162,8 @@ namespace Vonk.IdentityServer
         {
             identityServerOptions.InputLengthRestrictions.Scope = 5000; // 149 resources in FHIR R4 * 30 characters
         }
+
+        private readonly static string FHIR_BASE = "https://vonk.fire.ly";
 
         #endregion IdentityServerOptions
 
