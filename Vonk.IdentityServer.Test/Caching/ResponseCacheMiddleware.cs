@@ -23,6 +23,8 @@ namespace Vonk.IdentityServer
         {
             Check.NotNull(httpContext, nameof(httpContext));
 
+            await _next(httpContext);
+
             httpContext.Response.GetTypedHeaders().CacheControl =
             new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
             {
@@ -31,8 +33,6 @@ namespace Vonk.IdentityServer
             httpContext.Response.Headers.Add("pragma", "no-cache");
 
             _logger.LogDebug("ResponseCacheMiddleware - Added CacheControl and Pragma header");
-
-            await _next(httpContext);
         }
     }
 }
