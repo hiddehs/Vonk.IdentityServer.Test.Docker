@@ -22,11 +22,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="wwwroot\" />
+    <Folder Include="SmartTokenValidation\" />
+    <Folder Include="Caching\" />
+    <Folder Include="ProfileService\" />
+    <Folder Include="Support\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Hl7.Fhir.Specification.STU3" Version="1.9.0" />
     <PackageReference Include="IdentityServer4" Version="4.0.4" />
+    <PackageReference Include="Serilog" Version="2.9.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="3.1.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,5 @@
-﻿using IdentityServer4.Models;
+﻿using IdentityServer4.Configuration;
+using IdentityServer4.Models;
 using IdentityServer4.Test;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,9 @@ namespace Vonk.IdentityServer
 {
     public class Config
     {
+
+        #region ApiScopes
+
         public static List<ApiScope> GetApiScopes() =>
           (
             from resourceType in F.ModelInfo.SupportedResources.Union(new[] { "*" })
@@ -25,11 +29,24 @@ namespace Vonk.IdentityServer
             {
                 new ApiScope{
                     Name = "launch",
-                    DisplayName = "SMART on FHIR launch context",
+                    DisplayName = "Permission to obtain launch context when app is launched from an EHR",
                     UserClaims = new[] {"patient", "encounter", "location" }
+                },
+                new ApiScope
+                {
+                    Name = "launch/patient",
+                    DisplayName = "When launching outside the EHR, ask for a patient to be selected at launch time"
+                },
+                new ApiScope{
+                    Name = "fhirUser",
+                    DisplayName = "Permission to retrieve information about the current logged-in user"
                 }
             })
             .ToList();
+
+        #endregion ApiScopes
+
+        #region ApiResources
 
         public static IEnumerable<ApiResource> GetApiResources()
         {
@@ -42,6 +59,19 @@ namespace Vonk.IdentityServer
                 }
             };
         }
+
+        public static IEnumerable<IdentityResource> GetIdentityResources()
+        {
+            return new List<IdentityResource>
+            {
+                new IdentityResources.OpenId(),
+                new IdentityResources.Profile(),
+            };
+        }
+
+        #endregion ApiResources
+
+        #region Clients
 
         public static IEnumerable<Client> GetClients()
         {
@@ -65,17 +95,31 @@ namespace Vonk.IdentityServer
                     AlwaysIncludeUserClaimsInIdToken = true,
                     RequirePkce = false // Allow as an interactive client
                 },
+                new Client
+                {
+                    ClientId = "Inferno",
+                    RedirectUris = new[] { "http://0.0.0.0:4567/inferno/oauth2/static/redirect", "http://localhost:4567/inferno/oauth2/static/redirect" },
+
+                    AllowedGrantTypes = GrantTypes.Code,
+
+                    // secret for authentication
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+
+                    // scopes that client has access to
+                    AllowedScopes = GetApiScopes().Select(scope => scope.Name).Union(new[] { "openid", "profile" }).ToList(),
+                    AlwaysIncludeUserClaimsInIdToken = true,
+                    RequirePkce = false, // Allow as an interactive client
+                    AllowOfflineAccess = true
+                },
             };
         }
 
-        public static IEnumerable<IdentityResource> GetIdentityResources()
-        {
-            return new List<IdentityResource>
-            {
-                new IdentityResources.OpenId(),
-                new IdentityResources.Profile(),
-            };
-        }
+        #endregion Clients
+
+        #region Users
 
         public static List<TestUser> GetUsers()
         {
@@ -85,18 +129,45 @@ namespace Vonk.IdentityServer
                 {
                     SubjectId = "1",
                     Username = "alice",
-                    Password = "password"
-                    , Claims = new List<Claim>() { new Claim("patient", "alice-identifier")}
+                    Password = "password",
+                    Claims = new List<Claim>() { GetDefaultPatientClaim() }
                 },
                 new TestUser
                 {
                     SubjectId = "2",
                     Username = "bob",
-                    Password = "password"
-                    , Claims = new List<Claim>() { new Claim("patient", "bob-identifier")}
+                    Password = "password",
+                    Claims = new List<Claim>() { GetDefaultPatientClaim() }
                 }
             };
         }
+
+        #endregion Users
+
+        #region Claims
+
+        public static Claim GetDefaultPatientClaim()
+        {
+            return new Claim("patient", "test");
+        }
+
+        public static Claim GetDefaultFHIRUserClaim()
+        {
+            return new Claim("fhirUser", $"{FHIR_BASE}/Practitioner/test");
+        }
+
+        #endregion Claims
+
+        #region IdentityServerOptions
+
+        public static void GetOptions(IdentityServerOptions identityServerOptions)
+        {
+            identityServerOptions.InputLengthRestrictions.Scope = 5000; // 149 resources in FHIR R4 * 30 characters
+        }
+
+        private readonly static string FHIR_BASE = "https://vonk.fire.ly";
+
+        #endregion IdentityServerOptions
 
     }
 }
