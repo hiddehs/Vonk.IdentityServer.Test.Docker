@@ -95,25 +95,44 @@ namespace Vonk.IdentityServer
                     AlwaysIncludeUserClaimsInIdToken = true,
                     RequirePkce = false // Allow as an interactive client
                 },
-                new Client
+                CreateInfernoClient("Inferno-standalone", GetApiScopes().Select(scope => scope.Name).Union(new[] { "openid", "profile" }).ToList()),
+                CreateInfernoClient("Inferno-limited", GetApiScopes().Select(scope => scope.Name).Where(name => IsScopeForResources(name, "Patient", "Condition", "Observation")).Union(new[] { "openid", "profile" }).ToList())
+            };
+        }
+
+        private static bool IsScopeForResources(string scopeName, params string[] resourceNames)
+        {
+            foreach(var resourceName in resourceNames)
+            {
+                if (scopeName.Contains($"/{resourceName}."))
                 {
-                    ClientId = "Inferno",
-                    RedirectUris = new[] { "http://0.0.0.0:4567/inferno/oauth2/static/redirect", "http://localhost:4567/inferno/oauth2/static/redirect" },
+                    return true;
+                }
+            }
 
-                    AllowedGrantTypes = GrantTypes.Code,
+            return false;
+        }
 
-                    // secret for authentication
-                    ClientSecrets =
+        private static Client CreateInfernoClient(string clientId, ICollection<string> allowedScopes)
+        {
+            return new Client
+            {
+                ClientId = clientId,
+                RedirectUris = new[] { "http://0.0.0.0:4567/inferno/oauth2/static/redirect", "http://localhost:4567/inferno/oauth2/static/redirect" },
+
+                AllowedGrantTypes = GrantTypes.Code,
+
+                // secret for authentication
+                ClientSecrets =
                     {
                         new Secret("secret".Sha256())
                     },
 
-                    // scopes that client has access to
-                    AllowedScopes = GetApiScopes().Select(scope => scope.Name).Union(new[] { "openid", "profile" }).ToList(),
-                    AlwaysIncludeUserClaimsInIdToken = true,
-                    RequirePkce = false, // Allow as an interactive client
-                    AllowOfflineAccess = true
-                },
+                // scopes that client has access to
+                AllowedScopes = allowedScopes,
+                AlwaysIncludeUserClaimsInIdToken = true,
+                RequirePkce = false, // Allow as an interactive client
+                AllowOfflineAccess = true
             };
         }
 
@@ -165,7 +184,7 @@ namespace Vonk.IdentityServer
             identityServerOptions.InputLengthRestrictions.Scope = 5000; // 149 resources in FHIR R4 * 30 characters
         }
 
-        private readonly static string FHIR_BASE = "https://vonk.fire.ly";
+        private readonly static string FHIR_BASE = "http://my_host:4080";//"https://vonk.fire.ly";
 
         #endregion IdentityServerOptions
 
