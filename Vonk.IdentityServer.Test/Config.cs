@@ -159,7 +159,9 @@ namespace Vonk.IdentityServer
                 RequirePkce = false, // Allow as an interactive client
                 AllowOfflineAccess = true,
 
-                AccessTokenLifetime = 5
+                AccessTokenLifetime = 5,
+                RefreshTokenExpiration = TokenExpiration.Sliding,
+                SlidingRefreshTokenLifetime = 10
             };
         }
 
