@@ -75,6 +75,31 @@ namespace Vonk.IdentityServer
 
         public static IEnumerable<Client> GetClients()
         {
+            var standaloneResourceTypes = new[]
+            {
+                "Medication", 
+                "AllergyIntolerance", 
+                "CarePlan", 
+                "CareTeam", 
+                "Condition", 
+                "Device", 
+                "DiagnosticReport", 
+                "DocumentReference", 
+                "Encounter", 
+                "Goal", 
+                "Immunization", 
+                "Location", 
+                "MedicationRequest", 
+                "Observation", 
+                "Organization", 
+                "Patient", 
+                "Practitioner", 
+                "PractitionerRole", 
+                "Procedure", 
+                "Provenance",
+                "RelatedPerson"
+            };
+
             return new List<Client>
             {
                 new Client
@@ -95,8 +120,7 @@ namespace Vonk.IdentityServer
                     AlwaysIncludeUserClaimsInIdToken = true,
                     RequirePkce = false // Allow as an interactive client
                 },
-                CreateInfernoClient("Inferno-standalone", GetApiScopes().Select(scope => scope.Name).Union(new[] { "openid", "profile" }).ToList()),
-                CreateInfernoClient("Inferno-limited", GetApiScopes().Select(scope => scope.Name).Where(name => IsScopeForResources(name, "Patient", "Condition", "Observation")).Union(new[] { "openid", "profile" }).ToList())
+                CreateInfernoClient("Inferno-standalone", GetApiScopes().Select(scope => scope.Name).Where(name => IsScopeForResources(name, standaloneResourceTypes)).Union(new[] { "openid", "profile" }).ToList())
             };
         }
 
@@ -132,7 +156,7 @@ namespace Vonk.IdentityServer
                 AllowedScopes = allowedScopes,
                 AlwaysIncludeUserClaimsInIdToken = true,
                 RequirePkce = false, // Allow as an interactive client
-                AllowOfflineAccess = true
+                AllowOfflineAccess = true,
             };
         }
 
@@ -184,7 +208,8 @@ namespace Vonk.IdentityServer
             identityServerOptions.InputLengthRestrictions.Scope = 5000; // 149 resources in FHIR R4 * 30 characters
         }
 
-        private readonly static string FHIR_BASE = "http://my_host:4080";//"https://vonk.fire.ly";
+        private readonly static string FHIR_BASE = "http://my_host" +
+            ":4080";//"https://vonk.fire.ly";
 
         #endregion IdentityServerOptions
 
