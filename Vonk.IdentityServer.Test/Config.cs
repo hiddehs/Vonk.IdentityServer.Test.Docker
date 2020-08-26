@@ -128,7 +128,8 @@ namespace Vonk.IdentityServer
         {
             foreach(var resourceName in resourceNames)
             {
-                if (scopeName.Contains($"/{resourceName}."))
+                if (!scopeName.Contains('.')
+                    || scopeName.Contains($"/{resourceName}."))
                 {
                     return true;
                 }
