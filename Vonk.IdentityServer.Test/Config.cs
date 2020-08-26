@@ -100,6 +100,13 @@ namespace Vonk.IdentityServer
                 "RelatedPerson"
             };
 
+            var limitedResourceTypes = new[]
+            {
+                "Patient", 
+                "Condition", 
+                "Observation"
+            };
+
             return new List<Client>
             {
                 new Client
@@ -120,7 +127,8 @@ namespace Vonk.IdentityServer
                     AlwaysIncludeUserClaimsInIdToken = true,
                     RequirePkce = false // Allow as an interactive client
                 },
-                CreateInfernoClient("Inferno-standalone", GetApiScopes().Select(scope => scope.Name).Where(name => IsScopeForResources(name, standaloneResourceTypes)).Union(new[] { "openid", "profile" }).ToList())
+                CreateInfernoClient("Inferno-standalone", GetApiScopes().Select(scope => scope.Name).Where(name => IsScopeForResources(name, standaloneResourceTypes)).Union(new[] { "openid", "profile" }).ToList()),
+                CreateInfernoClient("Inferno-limited", GetApiScopes().Select(scope => scope.Name).Where(name => IsScopeForResources(name, limitedResourceTypes)).Union(new[] { "openid", "profile" }).ToList())
             };
         }
 
@@ -157,11 +165,11 @@ namespace Vonk.IdentityServer
                 AllowedScopes = allowedScopes,
                 AlwaysIncludeUserClaimsInIdToken = true,
                 RequirePkce = false, // Allow as an interactive client
-                AllowOfflineAccess = true,
+                AllowOfflineAccess = true
 
-                AccessTokenLifetime = 5,
-                RefreshTokenExpiration = TokenExpiration.Sliding,
-                SlidingRefreshTokenLifetime = 10
+                //AccessTokenLifetime = 5,
+                //RefreshTokenExpiration = TokenExpiration.Sliding,
+                //SlidingRefreshTokenLifetime = 10
             };
         }
 
