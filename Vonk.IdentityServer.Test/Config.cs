@@ -158,6 +158,8 @@ namespace Vonk.IdentityServer
                 AlwaysIncludeUserClaimsInIdToken = true,
                 RequirePkce = false, // Allow as an interactive client
                 AllowOfflineAccess = true,
+
+                AccessTokenLifetime = 5
             };
         }
 
