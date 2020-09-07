@@ -167,7 +167,7 @@ namespace Vonk.IdentityServer
             identityServerOptions.InputLengthRestrictions.Scope = 5000; // 149 resources in FHIR R4 * 30 characters
         }
 
-        private readonly static string FHIR_BASE = "http://vonkhost" +
+        private readonly static string FHIR_BASE = "http://my_host" +
             ":4080"; //"https://vonk.fire.ly";
 
         #endregion IdentityServerOptions
