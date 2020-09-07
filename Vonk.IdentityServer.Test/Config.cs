@@ -148,11 +148,19 @@ namespace Vonk.IdentityServer
 
         #region Claims
 
+        // See http://www.hl7.org/fhir/smart-app-launch/scopes-and-launch-context/index.html#launch-context-arrives-with-your-access_token
+        // In case of a standalone lauch, the patient context needs to be selected based on the patient authorization information (user needs to correspond to a single Patient resource)
+        // In case of an EHR launch, the patient context is provided by the EHR using the lauch context
+        // For now we hard-code the launch context to a fixed claim in the access token
         public static Claim GetDefaultPatientClaim()
         {
             return new Claim("patient", "test");
         }
 
+        // An identity token may be requested together with the access token
+        // If the fhirUser scope is requested, an URL pointing to the a Patient / Practitioner / RelatedPerson / Person resource should be included
+        // See http://www.hl7.org/fhir/smart-app-launch/scopes-and-launch-context/index.html#scopes-for-requesting-identity-data
+        // For now we hard-code the fhirUser to a fixed claim in the id token
         public static Claim GetDefaultFHIRUserClaim()
         {
             return new Claim("fhirUser", $"{FHIR_BASE}/Practitioner/test");

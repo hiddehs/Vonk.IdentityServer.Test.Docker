@@ -6,6 +6,10 @@ using System.Security.Claims;
 
 namespace Vonk.IdentityServer.Test.SmartTokenValidation
 {
+    /// <summary>
+    /// ICustomTokenRequestValidator allows to modify the access token requested by the client
+    /// See http://docs.identityserver.io/en/latest/topics/custom_token_request_validation.html
+    /// </summary>
     public class PatientIdTokenValidator : ICustomTokenRequestValidator
     {
         public Task ValidateAsync(CustomTokenRequestValidationContext context)

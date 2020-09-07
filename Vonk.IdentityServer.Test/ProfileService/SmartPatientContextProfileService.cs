@@ -5,6 +5,10 @@ using IdentityServer4.Services;
 
 namespace Vonk.IdentityServer.Test.ProfileService
 {
+    /// <summary>
+    /// IProfileService allows to provide custom identity information back to the client
+    /// See http://docs.identityserver.io/en/latest/reference/profileservice.html
+    /// </summary>
     public class SmartPatientContextProfileService : IProfileService
     {
         public Task GetProfileDataAsync(ProfileDataRequestContext context)
