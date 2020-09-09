@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using IdentityServer4.Validation;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using Vonk.IdentityServer.Test.Support;
 
 namespace Vonk.IdentityServer.Test.SmartTokenValidation
 {
@@ -13,6 +15,14 @@ namespace Vonk.IdentityServer.Test.SmartTokenValidation
     /// </summary>
     public class SmartAccessTokenValidator : ICustomTokenRequestValidator
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public SmartAccessTokenValidator(IHttpContextAccessor httpContextAccessor)
+        {
+            Check.NotNull(httpContextAccessor, nameof(httpContextAccessor));
+            _httpContextAccessor = httpContextAccessor;
+        }
+
         public Task ValidateAsync(CustomTokenRequestValidationContext context)
         {
             if (context.Result.CustomResponse is null)
@@ -25,7 +35,10 @@ namespace Vonk.IdentityServer.Test.SmartTokenValidation
                 (type, value) = ClaimToCustomResponse(Config.GetDefaultNeedPatientBanner());
                 context.Result.CustomResponse.Add(type, value);
 
-                (type, value) = ClaimToCustomResponse(Config.GetDefaultStyleUrl());
+                var httpContext = _httpContextAccessor.HttpContext;
+                var baseUrl = IdentitysServerBaseUrl(httpContext);
+
+                (type, value) = ClaimToCustomResponse(Config.GetDefaultStyleUrl(baseUrl));
                 context.Result.CustomResponse.Add(type, value);
             }
             else
@@ -39,6 +52,11 @@ namespace Vonk.IdentityServer.Test.SmartTokenValidation
         private (string, object) ClaimToCustomResponse(Claim claim)
         {
             return (claim.Type, claim.Value);
+        }
+
+        private string IdentitysServerBaseUrl(HttpContext httpContext)
+        {
+            return $"{httpContext.Request.Scheme}://{httpContext.Connection.LocalIpAddress}:{httpContext.Connection.LocalPort}";
         }
     }
 }
