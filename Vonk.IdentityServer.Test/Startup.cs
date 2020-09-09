@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using IdentityServer4.Validation;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -86,6 +87,7 @@ namespace Vonk.IdentityServer
                 options.OnDeleteCookie = cookieContext =>
                     CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
             });
+
             services
                 //Endpoint Routing does not support 'IApplicationBuilder.UseMvc(...)'. To use 'IApplicationBuilder.UseMvc' set 'MvcOptions.EnableEndpointRouting = false' inside 'ConfigureServices(...).
                 .AddMvc(mvcOptions => mvcOptions.EnableEndpointRouting = false);
@@ -101,7 +103,7 @@ namespace Vonk.IdentityServer
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiScopes(Config.GetApiScopes())
                 .AddInMemoryApiResources(Config.GetApiResources())
-                .AddCustomTokenRequestValidator<PatientIdTokenValidator>()
+                .AddCustomTokenRequestValidator<SmartAccessTokenValidator>()
                 .AddProfileService<SmartPatientContextProfileService>()
                 .AddInMemoryClients(Config.GetClients());
         }

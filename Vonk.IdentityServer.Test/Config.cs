@@ -166,6 +166,19 @@ namespace Vonk.IdentityServer
             return new Claim("fhirUser", $"{FHIR_BASE}/Practitioner/test");
         }
 
+        // Boolean value indicating whether the app was launched in a UX context where a patient banner is required (when true) or not required (when false).
+        // An app receiving a value of false should not take up screen real estate displaying a patient banner.
+        public static Claim GetDefaultNeedPatientBanner()
+        {
+            return new Claim("need_patient_banner", "false");
+        }
+
+        // String URL where the host’s style parameters can be retrieved (for apps that support styling)
+        public static Claim GetDefaultStyleUrl()
+        {
+            return new Claim("smart_style_url", "http://localhost/smart/style/v1.json");
+        }
+
         #endregion Claims
 
         #region IdentityServerOptions
@@ -175,7 +188,7 @@ namespace Vonk.IdentityServer
             identityServerOptions.InputLengthRestrictions.Scope = 5000; // 149 resources in FHIR R4 * 30 characters
         }
 
-        private readonly static string FHIR_BASE = "http://my_host" +
+        private readonly static string FHIR_BASE = "http://vonkhost" +
             ":4080"; //"https://vonk.fire.ly";
 
         #endregion IdentityServerOptions

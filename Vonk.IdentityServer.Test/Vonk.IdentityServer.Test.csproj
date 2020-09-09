@@ -23,7 +23,6 @@
   <ItemGroup>
     <Folder Include="wwwroot\" />
     <Folder Include="SmartTokenValidation\" />
-    <Folder Include="Caching\" />
     <Folder Include="ProfileService\" />
     <Folder Include="Support\" />
   </ItemGroup>
