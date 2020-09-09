@@ -100,7 +100,7 @@ namespace Vonk.IdentityServer
                 {
                     RequireConsent = true, // The user (not the requesting SMART app) needs to be able to disallow access to certain resource types, specific claims can be de-selected on the consent page
                     ClientId = "Inferno",
-                    RedirectUris = new[] { "http://0.0.0.0:4567/inferno/oauth2/static/redirect", "http://localhost:4567/inferno/oauth2/static/redirect", "http://vonkhost:4567/inferno/oauth2/static/redirect" },
+                    RedirectUris = new[] { "http://0.0.0.0:4567/inferno/oauth2/static/redirect", "http://localhost:4567/inferno/oauth2/static/redirect" },
 
                     AllowedGrantTypes = GrantTypes.Code,
 
@@ -188,7 +188,7 @@ namespace Vonk.IdentityServer
             identityServerOptions.InputLengthRestrictions.Scope = 5000; // 149 resources in FHIR R4 * 30 characters
         }
 
-        private readonly static string FHIR_BASE = "http://vonkhost" +
+        private readonly static string FHIR_BASE = "http://my_host" +
             ":4080"; //"https://vonk.fire.ly";
 
         #endregion IdentityServerOptions
