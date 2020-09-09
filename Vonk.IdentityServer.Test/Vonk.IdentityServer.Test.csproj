@@ -25,6 +25,8 @@
     <Folder Include="SmartTokenValidation\" />
     <Folder Include="ProfileService\" />
     <Folder Include="Support\" />
+    <Folder Include="wwwroot\smart\" />
+    <Folder Include="wwwroot\smart\style\" />
   </ItemGroup>
 
   <ItemGroup>
