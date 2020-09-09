@@ -158,7 +158,7 @@ namespace Vonk.IdentityServer
         }
 
         // An identity token may be requested together with the access token
-        // If the fhirUser scope is requested, an URL pointing to the a Patient / Practitioner / RelatedPerson / Person resource should be included
+        // If the fhirUser scope is requested, an URL pointing to a Patient / Practitioner / RelatedPerson / Person resource should be included
         // See http://www.hl7.org/fhir/smart-app-launch/scopes-and-launch-context/index.html#scopes-for-requesting-identity-data
         // For now we hard-code the fhirUser to a fixed claim in the id token
         public static Claim GetDefaultFHIRUserClaim()
