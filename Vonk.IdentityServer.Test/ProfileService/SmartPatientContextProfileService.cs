@@ -25,7 +25,6 @@ namespace Vonk.IdentityServer.Test.ProfileService
         {
             Check.NotNull(context, nameof(context));
 
-            context.IssuedClaims.Add(Config.GetDefaultPatientClaim());  // Add patient claim by default to each identity token
             context.IssuedClaims.Add(Config.GetDefaultFHIRUserClaim(_fhirServerConfig.Value?.FHIR_BASE_URL)); // Add fhirUser claim by default to each identity token
             return Task.CompletedTask;
         }
