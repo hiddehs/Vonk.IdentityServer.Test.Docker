@@ -1,16 +1,72 @@
-﻿using IdentityServer4.Validation;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Vonk.IdentityServer.Test.ProfileService;
 using Vonk.IdentityServer.Test.SmartTokenValidation;
+using Vonk.IdentityServer.Test.Support;
 
 namespace Vonk.IdentityServer
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+
+        public Startup(IConfiguration configuration)
+        {
+            Check.NotNull(configuration, nameof(configuration));
+            _configuration = configuration;
+        }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddOptions();
+            services.Configure<FHIRServerConfig>(_configuration.GetSection("FHIRServerConfig"));
+
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.MinimumSameSitePolicy = (SameSiteMode)(-1);
+                options.OnAppendCookie = cookieContext =>
+                CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
+                options.OnDeleteCookie = cookieContext =>
+                    CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
+            });
+
+            services
+                //Endpoint Routing does not support 'IApplicationBuilder.UseMvc(...)'. To use 'IApplicationBuilder.UseMvc' set 'MvcOptions.EnableEndpointRouting = false' inside 'ConfigureServices(...).
+                .AddMvc(mvcOptions => mvcOptions.EnableEndpointRouting = false);
+
+            services
+                .AddIdentityServer(Config.GetOptions)
+                .AddTestUsers(Config.GetUsers())
+                .AddDeveloperSigningCredential(
+#if RELEASE
+                false // do not persist key on release (every release invalidates previous keys)
+#endif
+                )
+                .AddInMemoryIdentityResources(Config.GetIdentityResources())
+                .AddInMemoryApiScopes(Config.GetApiScopes())
+                .AddInMemoryApiResources(Config.GetApiResources())
+                .AddCustomTokenRequestValidator<SmartAccessTokenValidator>()
+                .AddProfileService<SmartPatientContextProfileService>()
+                .AddInMemoryClients(Config.GetClients());
+        }
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseCookiePolicy();
+            app.UseIdentityServer();
+            app.UseStaticFiles();
+            app.UseMvcWithDefaultRoute();
+        }
+
         //Setup samesite cookie handling
         private void CheckSameSite(HttpContext httpContext, CookieOptions options)
         {
@@ -75,50 +131,6 @@ namespace Vonk.IdentityServer
             }
 
             return false;
-        }
-
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.MinimumSameSitePolicy = (SameSiteMode)(-1);
-                options.OnAppendCookie = cookieContext =>
-                CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
-                options.OnDeleteCookie = cookieContext =>
-                    CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
-            });
-
-            services
-                //Endpoint Routing does not support 'IApplicationBuilder.UseMvc(...)'. To use 'IApplicationBuilder.UseMvc' set 'MvcOptions.EnableEndpointRouting = false' inside 'ConfigureServices(...).
-                .AddMvc(mvcOptions => mvcOptions.EnableEndpointRouting = false);
-
-            services
-                .AddIdentityServer(Config.GetOptions)
-                .AddTestUsers(Config.GetUsers())
-                .AddDeveloperSigningCredential(
-#if RELEASE
-                false // do not persist key on release (every release invalidates previous keys)
-#endif
-                )
-                .AddInMemoryIdentityResources(Config.GetIdentityResources())
-                .AddInMemoryApiScopes(Config.GetApiScopes())
-                .AddInMemoryApiResources(Config.GetApiResources())
-                .AddCustomTokenRequestValidator<SmartAccessTokenValidator>()
-                .AddProfileService<SmartPatientContextProfileService>()
-                .AddInMemoryClients(Config.GetClients());
-        }
-
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseCookiePolicy();
-            app.UseIdentityServer();
-            app.UseStaticFiles();
-            app.UseMvcWithDefaultRoute();
         }
     }
 }

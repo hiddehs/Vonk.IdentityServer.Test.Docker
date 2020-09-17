@@ -54,7 +54,7 @@ namespace Vonk.IdentityServer.Test.SmartTokenValidation
             return (claim.Type, claim.Value);
         }
 
-        private string IdentitysServerBaseUrl(HttpContext httpContext)
+        private string IdentityServerBaseUrl(HttpContext httpContext)
         {
             return $"{httpContext.Request.Scheme}://{httpContext.Connection.LocalIpAddress}:{httpContext.Connection.LocalPort}";
         }

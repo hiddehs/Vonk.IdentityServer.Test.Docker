@@ -100,7 +100,7 @@ namespace Vonk.IdentityServer
                 {
                     RequireConsent = true, // The user (not the requesting SMART app) needs to be able to disallow access to certain resource types, specific claims can be de-selected on the consent page
                     ClientId = "Inferno",
-                    RedirectUris = new[] { "http://0.0.0.0:4567/inferno/oauth2/static/redirect", "http://localhost:4567/inferno/oauth2/static/redirect" },
+                    RedirectUris = new[] { "http://0.0.0.0:4567/inferno/oauth2/static/redirect", "http://localhost:4567/inferno/oauth2/static/redirect", "http://vonkhost:4567/inferno/oauth2/static/redirect" },
 
                     AllowedGrantTypes = GrantTypes.Code,
 
@@ -161,9 +161,9 @@ namespace Vonk.IdentityServer
         // If the fhirUser scope is requested, an URL pointing to a Patient / Practitioner / RelatedPerson / Person resource should be included
         // See http://www.hl7.org/fhir/smart-app-launch/scopes-and-launch-context/index.html#scopes-for-requesting-identity-data
         // For now we hard-code the fhirUser to a fixed claim in the id token
-        public static Claim GetDefaultFHIRUserClaim()
+        public static Claim GetDefaultFHIRUserClaim(string fhirBaseUrl)
         {
-            return new Claim("fhirUser", $"{FHIR_BASE}/Practitioner/test");
+            return new Claim("fhirUser", $"{fhirBaseUrl}/Practitioner/test");
         }
 
         // Boolean value indicating whether the app was launched in a UX context where a patient banner is required (when true) or not required (when false).
@@ -187,9 +187,6 @@ namespace Vonk.IdentityServer
         {
             identityServerOptions.InputLengthRestrictions.Scope = 5000; // 149 resources in FHIR R4 * 30 characters
         }
-
-        private readonly static string FHIR_BASE = "http://my_host" +
-            ":4080"; //"https://vonk.fire.ly";
 
         #endregion IdentityServerOptions
 
