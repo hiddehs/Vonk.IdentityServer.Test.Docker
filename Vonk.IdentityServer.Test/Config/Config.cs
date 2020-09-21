@@ -174,9 +174,9 @@ namespace Vonk.IdentityServer
         }
 
         // String URL where the host’s style parameters can be retrieved (for apps that support styling)
-        public static Claim GetDefaultStyleUrl(string baseUrl)
+        public static Claim GetDefaultStyleUrl(string identityServerBaseUrl)
         {
-            return new Claim("smart_style_url", $"{baseUrl}/smart/style/v1.json");
+            return new Claim("smart_style_url", $"{identityServerBaseUrl}/smart/style/v1.json");
         }
 
         #endregion Claims
