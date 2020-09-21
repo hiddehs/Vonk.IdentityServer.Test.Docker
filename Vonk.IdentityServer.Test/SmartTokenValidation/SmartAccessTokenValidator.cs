@@ -36,9 +36,9 @@ namespace Vonk.IdentityServer.Test.SmartTokenValidation
                 context.Result.CustomResponse.Add(type, value);
 
                 var httpContext = _httpContextAccessor.HttpContext;
-                var baseUrl = IdentityServerBaseUrl(httpContext);
+                var identityServerBaseUrl = IdentityServerBaseUrl(httpContext);
 
-                (type, value) = ClaimToCustomResponse(Config.GetDefaultStyleUrl(baseUrl));
+                (type, value) = ClaimToCustomResponse(Config.GetDefaultStyleUrl(identityServerBaseUrl));
                 context.Result.CustomResponse.Add(type, value);
             }
             else
