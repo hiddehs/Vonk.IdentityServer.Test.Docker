@@ -2,15 +2,30 @@
 using System.Threading.Tasks;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
+using Microsoft.Extensions.Options;
+using Vonk.IdentityServer.Test.Support;
 
 namespace Vonk.IdentityServer.Test.ProfileService
 {
-    public class SmartPatientContextProfileService : IProfileService
+    /// <summary>
+    /// IProfileService allows to provide custom identity information back to the client
+    /// See http://docs.identityserver.io/en/latest/reference/profileservice.html
+    /// </summary>
+    internal class SmartPatientContextProfileService : IProfileService
     {
+        private readonly IOptions<FHIRServerConfig> _fhirServerConfig;
+
+        public SmartPatientContextProfileService(IOptions<FHIRServerConfig> fhirServerConfig)
+        {
+            Check.NotNull(fhirServerConfig, nameof(fhirServerConfig));
+            _fhirServerConfig = fhirServerConfig;
+        }
+
         public Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
-            context.IssuedClaims.Add(Config.GetDefaultPatientClaim()); // Add patient claim by default to each id_token
-            context.IssuedClaims.Add(Config.GetDefaultFHIRUserClaim()); // Add fhirUser claim by default to each id_token
+            Check.NotNull(context, nameof(context));
+
+            context.IssuedClaims.Add(Config.GetDefaultFHIRUserClaim(_fhirServerConfig.Value?.FHIR_BASE_URL)); // Add fhirUser claim by default to each identity token
             return Task.CompletedTask;
         }
 

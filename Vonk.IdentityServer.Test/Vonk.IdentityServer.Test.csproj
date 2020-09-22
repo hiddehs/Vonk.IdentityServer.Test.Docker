@@ -23,9 +23,11 @@
   <ItemGroup>
     <Folder Include="wwwroot\" />
     <Folder Include="SmartTokenValidation\" />
-    <Folder Include="Caching\" />
     <Folder Include="ProfileService\" />
     <Folder Include="Support\" />
+    <Folder Include="wwwroot\smart\" />
+    <Folder Include="wwwroot\smart\style\" />
+    <Folder Include="Config\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +36,7 @@
     <PackageReference Include="Serilog" Version="2.9.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.8" />
   </ItemGroup>
 
   <ItemGroup>

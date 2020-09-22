@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
+using System.IO;
 
 #if DEBUG
 using System.Net;
@@ -26,6 +28,13 @@ namespace Vonk.IdentityServer
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
             .UseSerilog()
+            .ConfigureHostConfiguration(configHost =>
+            {
+                // Add the default settings before the actual settings as they'll be overwritten otherwise
+                configHost.SetBasePath(Directory.GetCurrentDirectory());
+                configHost.AddJsonFile("appsettings.default.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("appsettings.instance.json", optional: true, reloadOnChange: true);
+            })
             .ConfigureWebHostDefaults(
                 webhost => {
                     webhost.UseStartup<Startup>();
