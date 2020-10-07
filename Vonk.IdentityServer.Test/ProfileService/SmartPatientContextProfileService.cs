@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
@@ -25,6 +26,10 @@ namespace Vonk.IdentityServer.Test.ProfileService
         {
             Check.NotNull(context, nameof(context));
 
+            if (context.RequestedClaimTypes.Any(item => item == "patient"))
+            {
+                context.IssuedClaims.Add(Config.GetDefaultPatientClaim()); 
+            }
             context.IssuedClaims.Add(Config.GetDefaultFHIRUserClaim(_fhirServerConfig.Value?.FHIR_BASE_URL)); // Add fhirUser claim by default to each identity token
             return Task.CompletedTask;
         }
