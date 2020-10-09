@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Config\" />
+    <Folder Include="ProfileService\" />
+    <Folder Include="SmartTokenValidation\" />
+    <Folder Include="Support\" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <PackageReference Include="Hl7.Fhir.Specification.STU3" Version="1.9.0" />
+    <PackageReference Include="IdentityServer4" Version="4.0.4" />
+  </ItemGroup>
+    
+</Project>
