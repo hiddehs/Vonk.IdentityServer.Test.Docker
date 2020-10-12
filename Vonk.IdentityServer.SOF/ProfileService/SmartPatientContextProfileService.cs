@@ -12,7 +12,7 @@ namespace Vonk.IdentityServer.Test.ProfileService
     /// IProfileService allows to provide custom identity information back to the client
     /// See http://docs.identityserver.io/en/latest/reference/profileservice.html
     /// </summary>
-    internal class SmartPatientContextProfileService : IProfileService
+    public class SmartPatientContextProfileService : IProfileService
     {
         private readonly IOptions<FHIRServerConfig> _fhirServerConfig;
 
