@@ -26,11 +26,11 @@ namespace Vonk.IdentityServer.Test.ProfileService
         {
             Check.NotNull(context, nameof(context));
 
-            if (context.RequestedClaimTypes.Any(item => item == "patient"))
-            {
-                context.IssuedClaims.Add(Config.GetDefaultPatientClaim()); 
-            }
-            context.IssuedClaims.Add(Config.GetDefaultFHIRUserClaim(_fhirServerConfig.Value?.FHIR_BASE_URL)); // Add fhirUser claim by default to each identity token
+            // ToDo: Check if these scopes are requested in context.RequestedResources
+
+            context.IssuedClaims.Add(Config.GetDefaultPatientClaim()); // Need to be added, otherwise Vonk can't enforce the Patient compartment
+            context.IssuedClaims.Add(Config.GetDefaultFHIRUserClaim(_fhirServerConfig.Value?.FHIR_BASE_URL));
+
             return Task.CompletedTask;
         }
 
