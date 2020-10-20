@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using static Microsoft.Extensions.Logging.AzureAppServicesLoggerFactoryExtensions;
 using Serilog;
 using Serilog.Events;
 using System.IO;
@@ -36,6 +37,10 @@ namespace Vonk.IdentityServer
                           .AddJsonFile("appsettings.instance.json", optional: true, reloadOnChange: true)
                           .AddEnvironmentVariables("IDENTITY_SERVER_");
             })
+            .ConfigureLogging((hostingContext, logging) =>
+            {
+                logging.AddAzureWebAppDiagnostics();
+            })
             .ConfigureWebHostDefaults(
                 webhost => {
                     webhost.UseStartup<Startup>();
@@ -43,10 +48,10 @@ namespace Vonk.IdentityServer
 #if DEBUG
                         options =>
                         {
-                            options.Listen(IPAddress.Loopback, 5100);
+                            options.Listen(IPAddress.Parse("192.168.178.30"), 5100);
                             options.Listen(IPAddress.Loopback, 5101, listenOptions =>
                             {
-                                listenOptions.UseHttps("ssl_cert.pfx", "cert-password");
+                                listenOptions.UseHttps("ssl_cert.pfx", "test");
                             });
                         }
 #endif
