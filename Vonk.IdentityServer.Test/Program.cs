@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using static Microsoft.Extensions.Logging.AzureAppServicesLoggerFactoryExtensions;
 using Serilog;
 using Serilog.Events;
 using System.IO;
