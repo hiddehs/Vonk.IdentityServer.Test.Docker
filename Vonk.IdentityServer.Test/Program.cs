@@ -33,7 +33,8 @@ namespace Vonk.IdentityServer
                 // Add the default settings before the actual settings as they'll be overwritten otherwise
                 configHost.SetBasePath(Directory.GetCurrentDirectory());
                 configHost.AddJsonFile("appsettings.default.json", optional: true, reloadOnChange: true)
-                .AddJsonFile("appsettings.instance.json", optional: true, reloadOnChange: true);
+                          .AddJsonFile("appsettings.instance.json", optional: true, reloadOnChange: true)
+                          .AddEnvironmentVariables("IDENTITY_SERVER_");
             })
             .ConfigureWebHostDefaults(
                 webhost => {
