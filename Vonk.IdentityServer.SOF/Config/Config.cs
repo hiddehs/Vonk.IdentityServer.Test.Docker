@@ -100,7 +100,10 @@ namespace Vonk.IdentityServer
                 {
                     RequireConsent = true, // The user (not the requesting SMART app) needs to be able to disallow access to certain resource types, specific claims can be de-selected on the consent page
                     ClientId = "Inferno",
-                    RedirectUris = new[] { "http://0.0.0.0:4567/inferno/oauth2/static/redirect", "http://localhost:4567/inferno/oauth2/static/redirect", "http://vonkhost:4567/inferno/oauth2/static/redirect" },
+                    RedirectUris = new[] { "http://0.0.0.0:4567/inferno/oauth2/static/redirect",
+                                           "http://localhost:4567/inferno/oauth2/static/redirect",
+                                           "http://vonkhost:4567/inferno/oauth2/static/redirect",
+                                           "https://inferno.healthit.gov/inferno/oauth2/static/redirect"},
 
                     AllowedGrantTypes = GrantTypes.Code,
 
