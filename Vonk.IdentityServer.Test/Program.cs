@@ -5,6 +5,7 @@ using static Microsoft.Extensions.Logging.AzureAppServicesLoggerFactoryExtension
 using Serilog;
 using Serilog.Events;
 using System.IO;
+using System;
 
 #if DEBUG
 using System.Net;
@@ -21,6 +22,12 @@ namespace Vonk.IdentityServer
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
             .Enrich.FromLogContext()
             .WriteTo.Console()
+            .WriteTo.File( // Write to Azure Log Stream
+                @"D:\home\LogFiles\Application\identity_server_log.txt",
+                fileSizeLimitBytes: 1_000_000,
+                rollOnFileSizeLimit: true,
+                shared: true,
+                flushToDiskInterval: TimeSpan.FromSeconds(1))
             .CreateLogger();
 
             CreateHostBuilder(args).Build().Run();
@@ -36,10 +43,6 @@ namespace Vonk.IdentityServer
                 configHost.AddJsonFile("appsettings.default.json", optional: true, reloadOnChange: true)
                           .AddJsonFile("appsettings.instance.json", optional: true, reloadOnChange: true)
                           .AddEnvironmentVariables("IDENTITY_SERVER_");
-            })
-            .ConfigureLogging((hostingContext, logging) =>
-            {
-                logging.AddAzureWebAppDiagnostics();
             })
             .ConfigureWebHostDefaults(
                 webhost => {
