@@ -50,10 +50,10 @@ namespace Vonk.IdentityServer
 #if DEBUG
                         options =>
                         {
-                            options.Listen(IPAddress.Parse("192.168.178.30"), 5100);
+                            options.Listen(IPAddress.Loopback, 5100);
                             options.Listen(IPAddress.Loopback, 5101, listenOptions =>
                             {
-                                listenOptions.UseHttps("ssl_cert.pfx", "test");
+                                listenOptions.UseHttps("ssl_cert.pfx", "cert-password");
                             });
                         }
 #endif
