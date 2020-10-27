@@ -4,6 +4,7 @@ using IdentityServer4.Test;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using Vonk.IdentityServer.SOF.Model;
 using F = Hl7.Fhir.Model;
 
 namespace Vonk.IdentityServer
@@ -94,9 +95,9 @@ namespace Vonk.IdentityServer
                     // scopes that client has access to
                     AllowedScopes = GetApiScopes().Select(scope => scope.Name).Union(new[] { "openid", "profile" }).ToList(),
                     AlwaysIncludeUserClaimsInIdToken = true,
-                    RequirePkce = false // Allow as an interactive client
+                    RequirePkce = false, // Allow as an interactive client
                 },
-                new Client
+                new SmartClient
                 {
                     RequireConsent = true, // The user (not the requesting SMART app) needs to be able to disallow access to certain resource types, specific claims can be de-selected on the consent page
                     ClientId = "Inferno",
@@ -117,7 +118,8 @@ namespace Vonk.IdentityServer
                     AllowedScopes = GetApiScopes().Select(scope => scope.Name).Union(new[] { "openid", "profile" }).ToList(),
                     AlwaysIncludeUserClaimsInIdToken = true,
                     RequirePkce = false, // Allow as an interactive client
-                    AllowOfflineAccess = true
+                    AllowOfflineAccess = true,
+                    LaunchIds = new[] { "xyz123" } // Launch ids are opaque identifiers passed to the identity server to communicate the EHR context. Currently hard-coded as there is no communication with external systems, i.e. EHRs, at the moment.
                 }
             };
         }
