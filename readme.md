@@ -4,7 +4,7 @@
 
 For instructions on how to use this and the access control features to use it for, see the Vonk documentation:
 
-- [Vonk FHIR Server Access Control](http://docs.simplifier.net/vonk/features/accesscontrol.html)
+- [Vonk FHIR Server Access Control](http://docs.simplifier.net/vonk/security/accesscontrol.html)
 - [Usage of this Identity Provider](http://docs.simplifier.net/vonk/deployment/identityprovider.html)
 
 |Master|
