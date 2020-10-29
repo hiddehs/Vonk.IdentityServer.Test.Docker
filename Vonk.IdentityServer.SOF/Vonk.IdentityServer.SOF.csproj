@@ -10,6 +10,7 @@
     <Folder Include="ProfileService\" />
     <Folder Include="SmartTokenValidation\" />
     <Folder Include="Support\" />
+    <Folder Include="Model\" />
   </ItemGroup>
     
   <ItemGroup>
