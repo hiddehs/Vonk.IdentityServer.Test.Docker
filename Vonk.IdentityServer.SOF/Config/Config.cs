@@ -120,6 +120,26 @@ namespace Vonk.IdentityServer
                     RequirePkce = false, // Allow as an interactive client
                     AllowOfflineAccess = true,
                     LaunchIds = new[] { "xyz123" } // Launch ids are opaque identifiers passed to the identity server to communicate the EHR context. Currently hard-coded as there is no communication with external systems, i.e. EHRs, at the moment.
+                },
+                new Client
+                {
+                    RequireConsent = true, // The user (not the requesting SMART app) needs to be able to disallow access to certain resource types, specific claims can be de-selected on the consent page
+                    ClientId = "Inferno-Public",
+                    RedirectUris = new[] { "http://0.0.0.0:4567/inferno/oauth2/static/redirect",
+                                           "http://localhost:4567/inferno/oauth2/static/redirect",
+                                           "http://vonkhost:4567/inferno/oauth2/static/redirect",
+                                           "https://inferno.healthit.gov/inferno/oauth2/static/redirect"},
+
+                    AllowedGrantTypes = GrantTypes.Code,
+
+                    // no secret for authentication
+
+                    // scopes that client has access to
+                    AllowedScopes = GetApiScopes().Select(scope => scope.Name).Union(new[] { "openid", "profile" }).ToList(),
+                    AlwaysIncludeUserClaimsInIdToken = true,
+                    RequirePkce = false, // Allow as an interactive client
+                    AllowOfflineAccess = true,
+                    RequireClientSecret = false
                 }
             };
         }
