@@ -27,7 +27,7 @@ namespace Vonk.IdentityServer.SOF.SmartTokenValidation
             Check.NotNull(context, nameof(context));
 
             var audience = context.Result.ValidatedRequest.Raw["aud"];
-            if (!_fhirServerConfig.Value?.FHIR_BASE_URL.Equals(audience) ?? false)
+            if (audience is { } && (!_fhirServerConfig.Value?.FHIR_BASE_URL.Equals(audience) ?? false))
             {
                 _logger.LogDebug($"AudienceAuthorizeRequestValidator - Rejecting AuthorizeRequest as the audience '{audience}' does not match the expected value '{_fhirServerConfig.Value?.FHIR_BASE_URL}'");
                 context.Result.Error = "Invalid Authorize Request";
