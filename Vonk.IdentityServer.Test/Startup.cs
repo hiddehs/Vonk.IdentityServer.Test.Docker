@@ -62,8 +62,11 @@ namespace Vonk.IdentityServer
             identityServerBuilder
                 .AddJwtBearerClientAuthentication();
 
-            services.AddTransient<ISigningCredentialStore, SmartKeyStore>();
-            services.AddTransient<IValidationKeysStore, SmartKeyStore>();
+            // Enable AddDeveloperSigningCredential instead of the ISigningCredentialStore and IValidationKeysStore below if you don't want to configure the signing and valdidation keys
+            // identityServerBuilder.AddDeveloperSigningCredential();
+
+            services.AddSingleton<ISigningCredentialStore, SmartKeyStore>();
+            services.AddSingleton<IValidationKeysStore, SmartKeyStore>();
 
             //Endpoint Routing does not support 'IApplicationBuilder.UseMvc(...)'. To use 'IApplicationBuilder.UseMvc' set 'MvcOptions.EnableEndpointRouting = false' inside 'ConfigureServices(...).
             services.AddMvc(mvcOptions => mvcOptions.EnableEndpointRouting = false);
