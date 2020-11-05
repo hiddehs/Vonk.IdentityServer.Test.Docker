@@ -13,6 +13,12 @@ variables:
   buildConfiguration: 'Release'
   azureSubscription: vonk-identityserver
 
+trigger:
+  branches:
+    include:
+    - develop*
+    - release*
+
 stages:
 - stage: build
   jobs:
