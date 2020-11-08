@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using IdentityServer4.Stores;
+using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -61,6 +62,11 @@ namespace Vonk.IdentityServer
             // Add signing credentials
             identityServerBuilder
                 .AddJwtBearerClientAuthentication();
+
+            // Support for https://tools.ietf.org/html/rfc7523
+            identityServerBuilder
+                .AddSecretParser<JwtBearerClientAssertionSecretParser>()
+                .AddSecretValidator<PrivateKeyJwtSecretValidator>();
 
             // Enable AddDeveloperSigningCredential instead of the ISigningCredentialStore and IValidationKeysStore below if you don't want to configure the signing and valdidation keys
             // identityServerBuilder.AddDeveloperSigningCredential();
