@@ -21,4 +21,3 @@ The Identity Provider runs with preconfigured values in memory, so it has no dat
 ## Thank you
 
 This Identity Provider is built on top [IdentityServer4](https://github.com/IdentityServer/IdentityServer4), an excellent project to get started with Open ID Connect.
-
