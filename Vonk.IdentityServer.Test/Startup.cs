@@ -59,13 +59,9 @@ namespace Vonk.IdentityServer
                 .AddProfileService<SmartPatientContextProfileService>();
 
             // Add signing credentials
+            // Adds support for https://tools.ietf.org/html/rfc7523
             identityServerBuilder
                 .AddJwtBearerClientAuthentication();
-
-            // Support for https://tools.ietf.org/html/rfc7523
-            identityServerBuilder
-                .AddSecretParser<JwtBearerClientAssertionSecretParser>()
-                .AddSecretValidator<PrivateKeyJwtSecretValidator>();
 
             // Enable AddDeveloperSigningCredential instead of the ISigningCredentialStore and IValidationKeysStore below if you don't want to configure the signing and valdidation keys
             // identityServerBuilder.AddDeveloperSigningCredential();
