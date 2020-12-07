@@ -151,10 +151,11 @@ namespace Vonk.IdentityServer
                                            "https://inferno.healthit.gov/inferno/oauth2/static/redirect"},
                     ClientSecrets =
                     {
+                        // See https://inferno.healthit.gov/inferno/.well-known/jwks.json
                         new Secret
                         {
                             Type = IdentityServerConstants.SecretTypes.JsonWebKey,
-                            Value = "{'e':'AQAB','kid':'4b49a739d1eb115b3225f4cf9beb6d1b','kty':'RSA','n':'vjbIzTqiY8K8zApeNng5ekNNIxJfXAue9BjoMrZ9Qy9m7yIA-tf6muEupEXWhq70tC7vIGLqJJ4O8m7yiH8H2qklX2mCAMg3xG3nbykY2X7JXtW9P8VIdG0sAMt5aZQnUGCgSS3n0qaooGn2LUlTGIR88Qi-4Nrao9_3Ki3UCiICeCiAE224jGCg0OlQU6qj2gEB3o-DWJFlG_dz1y-Mxo5ivaeM0vWuodjDrp-aiabJcSF_dx26sdC9dZdBKXFDq0t19I9S9AyGpGDJwzGRtWHY6LsskNHLvo8Zb5AsJ9eRZKpnh30SYBZI9WHtzU85M9WQqdScR69Vyp-6Uhfbvw'}"
+                            Value = "{'e':'AQAB','kid':'b41528b6f37a9500edb8a905a595bdd7','kty':'RSA','n':'vjbIzTqiY8K8zApeNng5ekNNIxJfXAue9BjoMrZ9Qy9m7yIA-tf6muEupEXWhq70tC7vIGLqJJ4O8m7yiH8H2qklX2mCAMg3xG3nbykY2X7JXtW9P8VIdG0sAMt5aZQnUGCgSS3n0qaooGn2LUlTGIR88Qi-4Nrao9_3Ki3UCiICeCiAE224jGCg0OlQU6qj2gEB3o-DWJFlG_dz1y-Mxo5ivaeM0vWuodjDrp-aiabJcSF_dx26sdC9dZdBKXFDq0t19I9S9AyGpGDJwzGRtWHY6LsskNHLvo8Zb5AsJ9eRZKpnh30SYBZI9WHtzU85M9WQqdScR69Vyp-6Uhfbvw'}"
                         }
                     },
                     AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
