@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using IdentityServer4.Stores;
+﻿using IdentityServer4.Stores;
 using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
