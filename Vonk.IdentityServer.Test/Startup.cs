@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using IdentityServer4.Stores;
+using IdentityServer4.Validation;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Vonk.IdentityServer.SOF.KeyManagement;
 using Vonk.IdentityServer.SOF.SmartTokenValidation;
 using Vonk.IdentityServer.Test.ProfileService;
 using Vonk.IdentityServer.Test.SmartTokenValidation;
@@ -25,6 +28,7 @@ namespace Vonk.IdentityServer
         {
             services.AddOptions();
             services.Configure<FHIRServerConfig>(_configuration.GetSection("FHIRServerConfig"));
+            services.Configure<KeyManagementConfig>(_configuration.GetSection("KeyManagementConfig"));
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -35,25 +39,38 @@ namespace Vonk.IdentityServer
                     CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
             });
 
-            services
-                //Endpoint Routing does not support 'IApplicationBuilder.UseMvc(...)'. To use 'IApplicationBuilder.UseMvc' set 'MvcOptions.EnableEndpointRouting = false' inside 'ConfigureServices(...).
-                .AddMvc(mvcOptions => mvcOptions.EnableEndpointRouting = false);
+            var identityServerBuilder = services.AddIdentityServer(Config.GetOptions);
 
-            services
-                .AddIdentityServer(Config.GetOptions)
+            // Add identities and clients
+            identityServerBuilder
                 .AddTestUsers(Config.GetUsers())
-                .AddDeveloperSigningCredential(
-#if RELEASE
-                false // do not persist key on release (every release invalidates previous keys)
-#endif
-                )
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
+                .AddInMemoryClients(Config.GetClients());
+
+            // Add scopes and resources
+            identityServerBuilder
                 .AddInMemoryApiScopes(Config.GetApiScopes())
-                .AddInMemoryApiResources(Config.GetApiResources())
+                .AddInMemoryApiResources(Config.GetApiResources());
+
+            // Add custom SMART on FHIR validation services
+            identityServerBuilder
                 .AddCustomTokenRequestValidator<SmartAccessTokenValidator>()
                 .AddCustomAuthorizeRequestValidator<AudienceAuthorizeRequestValidator>()
-                .AddProfileService<SmartPatientContextProfileService>()
-                .AddInMemoryClients(Config.GetClients());
+                .AddProfileService<SmartPatientContextProfileService>();
+
+            // Add signing credentials
+            // Adds support for https://tools.ietf.org/html/rfc7523
+            identityServerBuilder
+                .AddJwtBearerClientAuthentication();
+
+            // Enable AddDeveloperSigningCredential instead of the ISigningCredentialStore and IValidationKeysStore below if you don't want to configure the signing and valdidation keys
+            // identityServerBuilder.AddDeveloperSigningCredential();
+
+            services.AddSingleton<ISigningCredentialStore, SmartKeyStore>();
+            services.AddSingleton<IValidationKeysStore, SmartKeyStore>();
+
+            //Endpoint Routing does not support 'IApplicationBuilder.UseMvc(...)'. To use 'IApplicationBuilder.UseMvc' set 'MvcOptions.EnableEndpointRouting = false' inside 'ConfigureServices(...).
+            services.AddMvc(mvcOptions => mvcOptions.EnableEndpointRouting = false);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

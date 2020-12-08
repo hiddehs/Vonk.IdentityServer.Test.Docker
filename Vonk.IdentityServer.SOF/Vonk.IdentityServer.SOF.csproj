@@ -11,6 +11,7 @@
     <Folder Include="SmartTokenValidation\" />
     <Folder Include="Support\" />
     <Folder Include="Model\" />
+    <Folder Include="KeyManagement\" />
   </ItemGroup>
     
   <ItemGroup>

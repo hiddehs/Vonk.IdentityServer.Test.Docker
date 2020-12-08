@@ -1,4 +1,5 @@
-﻿using IdentityServer4.Configuration;
+﻿using IdentityServer4;
+using IdentityServer4.Configuration;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace Vonk.IdentityServer
         public static List<ApiScope> GetApiScopes() =>
           (
             from resourceType in F.ModelInfo.SupportedResources.Union(new[] { "*" })
-            from subject in new[] { "user", "patient" }
+            from subject in new[] { "user", "patient", "system" }
             from action in new[] { "read", "write" }
             select
                 new ApiScope
@@ -140,6 +141,25 @@ namespace Vonk.IdentityServer
                     RequirePkce = false, // Allow as an interactive client
                     AllowOfflineAccess = true,
                     RequireClientSecret = false
+                },
+                new Client
+                {
+                    ClientId = "Inferno-Bulk",
+                    RedirectUris = new[] { "http://0.0.0.0:4567/inferno/oauth2/static/redirect",
+                                           "http://localhost:4567/inferno/oauth2/static/redirect",
+                                           "http://vonkhost:4567/inferno/oauth2/static/redirect",
+                                           "https://inferno.healthit.gov/inferno/oauth2/static/redirect"},
+                    ClientSecrets =
+                    {
+                        // See https://inferno.healthit.gov/inferno/.well-known/jwks.json
+                        new Secret
+                        {
+                            Type = IdentityServerConstants.SecretTypes.JsonWebKey,
+                            Value = "{'e':'AQAB','kid':'b41528b6f37a9500edb8a905a595bdd7','kty':'RSA','n':'vjbIzTqiY8K8zApeNng5ekNNIxJfXAue9BjoMrZ9Qy9m7yIA-tf6muEupEXWhq70tC7vIGLqJJ4O8m7yiH8H2qklX2mCAMg3xG3nbykY2X7JXtW9P8VIdG0sAMt5aZQnUGCgSS3n0qaooGn2LUlTGIR88Qi-4Nrao9_3Ki3UCiICeCiAE224jGCg0OlQU6qj2gEB3o-DWJFlG_dz1y-Mxo5ivaeM0vWuodjDrp-aiabJcSF_dx26sdC9dZdBKXFDq0t19I9S9AyGpGDJwzGRtWHY6LsskNHLvo8Zb5AsJ9eRZKpnh30SYBZI9WHtzU85M9WQqdScR69Vyp-6Uhfbvw'}"
+                        }
+                    },
+                    AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
+                    AllowedScopes = GetApiScopes().Where(scope => scope.Name.StartsWith("system")).Select(scope => scope.Name).ToList(), // openid and profile are not needed here because we are dealing with system scopes here
                 }
             };
         }
