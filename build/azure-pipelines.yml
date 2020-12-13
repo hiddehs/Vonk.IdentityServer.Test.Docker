@@ -70,3 +70,10 @@ stages:
         azureSubscription: $(azureSubscription)
         appName: vonk-identityserver
         package: '$(Build.ArtifactStagingDirectory)/drop/**/*.zip'
+    - task: AzureWebApp@1
+      displayName: Deploy to Azure WebApps (Bulk configuration)
+      inputs:
+        appType: webApp
+        azureSubscription: $(azureSubscription)
+        appName: vonk-identityserver-bulk
+        package: '$(Build.ArtifactStagingDirectory)/drop/**/*.zip'
