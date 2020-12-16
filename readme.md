@@ -1,10 +1,10 @@
-# Identity Provider for testing Vonk access control
+# Identity Provider for testing Firely Server access control
 
-[Vonk FHIR Server](http://vonk.furore.com) provides access control features based on SMART on FHIR scopes and launch context. Because online available Open ID Connect providers do not provide these claims, we provide you with a simple in-memory Identity Provider that **can** provide these claims.
+[Firely Server](http://vonk.furore.com) provides access control features based on SMART on FHIR scopes and launch context. Because online available Open ID Connect providers do not provide these claims, we provide you with a simple in-memory Identity Provider that **can** provide these claims.
 
 For instructions on how to use this and the access control features to use it for, see the Vonk documentation:
 
-- [Vonk FHIR Server Access Control](http://docs.simplifier.net/vonk/security/accesscontrol.html)
+- [Firely Server Access Control](http://docs.simplifier.net/vonk/security/accesscontrol.html)
 - [Usage of this Identity Provider](http://docs.simplifier.net/vonk/deployment/identityprovider.html)
 
 |Master|
